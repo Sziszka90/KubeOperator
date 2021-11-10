@@ -1,0 +1,11 @@
+apiVersion: webapp.example.com/v1
+kind: AppRunner
+metadata:
+  name: apprunner-sample
+spec:
+  frontend:
+    replicas: 1
+    host: example.com
+    servingPort: 8080
+    image: nginx
+    
