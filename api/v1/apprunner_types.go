@@ -53,7 +53,8 @@ type FrontendSpec struct {
 type AppRunnerStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
-	URL string `json:"url"`
+	URL    string `json:"url"`
+	Status string `json:"status,omitempty"`
 }
 
 //+kubebuilder:object:root=true

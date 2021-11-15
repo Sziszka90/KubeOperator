@@ -19,12 +19,12 @@ package controllers
 import (
 	"context"
 
+	"github.com/go-logr/logr"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-	"sigs.k8s.io/controller-runtime/pkg/log"
 
 	webappv1 "gomodule/api/v1"
 )
@@ -32,12 +32,15 @@ import (
 // AppRunnerReconciler reconciles a AppRunner object
 type AppRunnerReconciler struct {
 	client.Client
+	Log    logr.Logger
 	Scheme *runtime.Scheme
 }
 
-//+kubebuilder:rbac:groups=webapp.example.com,resources=operators,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=webapp.example.com,resources=operators/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=webapp.example.com,resources=operators/finalizers,verbs=update
+// +kubebuilder:rbac:groups=webapp.example.com,resources=apprunnner,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=webapp.example.com,resources=apprunnner/status,verbs=get;update;patch
+
+// +kubebuilder:rbac:groups=apps,resources=deployments,verbs=list;watch;get;patch
+// +kubebuilder:rbac:groups=core,resources=services,verbs=list;watch;get;patch
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
@@ -49,7 +52,7 @@ type AppRunnerReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.10.0/pkg/reconcile
 func (r *AppRunnerReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	log := log.FromContext(ctx)
+	log := r.Log.WithValues("AppRunner", req.NamespacedName)
 
 	log.Info("reconciling operator")
 

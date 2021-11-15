@@ -34,7 +34,7 @@ func (r *AppRunnerReconciler) desiredDeployment(apprunner webappv1.AppRunner) (a
 							Name:  "container",
 							Image: apprunner.Spec.Frontend.Image,
 							Ports: []corev1.ContainerPort{
-								{ContainerPort: 80, Name: "http", Protocol: "TCP"},
+								{ContainerPort: 8080, Name: "http", Protocol: "TCP"},
 							},
 						},
 					},
@@ -59,7 +59,7 @@ func (r *AppRunnerReconciler) desiredService(apprunner webappv1.AppRunner) (core
 		},
 		Spec: corev1.ServiceSpec{
 			Ports: []corev1.ServicePort{
-				{Name: "http", Port: 8080, Protocol: "TCP", TargetPort: intstr.FromString("http")},
+				{Name: "http", Port: 80, Protocol: "TCP", TargetPort: intstr.FromString("http")},
 			},
 			Selector: map[string]string{"operator": apprunner.Name},
 			Type:     corev1.ServiceTypeLoadBalancer,
@@ -80,7 +80,6 @@ func urlForService(svc corev1.Service, port int32) string {
 	if len(svc.Status.LoadBalancer.Ingress) == 0 {
 		return ""
 	}
-
 	host := svc.Status.LoadBalancer.Ingress[0].Hostname
 	if host == "" {
 		host = svc.Status.LoadBalancer.Ingress[0].IP

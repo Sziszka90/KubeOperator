@@ -4,8 +4,8 @@ metadata:
   name: apprunner-sample
 spec:
   frontend:
-    replicas: 1
+    replicas: 2
     host: example.com
-    servingPort: 8080
+    servingPort: 80
     image: nginx
     
